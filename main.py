@@ -1,27 +1,22 @@
-import pdfplumber
-import re
+from textblob import TextBlob
 
-pdf_path = input("Enter PDF file path: ")
+print("===== AI Sentiment Analyzer =====")
 
-with pdfplumber.open(pdf_path) as pdf:
-    text = ""
+while True:
+    text = input("\nEnter a sentence (or type quit): ")
 
-    for page in pdf.pages:
-        page_text = page.extract_text()
-        if page_text:
-            text += page_text + "\n"
+    if text.lower() == "quit":
+        print("Goodbye!")
+        break
 
-print("\n----- Resume Details -----")
+    analysis = TextBlob(text)
+    polarity = analysis.sentiment.polarity
 
-emails = re.findall(r'[\w\.-]+@[\w\.-]+', text)
-phones = re.findall(r'\b\d{10}\b', text)
+    print(f"Polarity Score: {polarity:.2f}")
 
-if emails:
-    print("Email:", emails[0])
-else:
-    print("Email not found")
-
-if phones:
-    print("Phone:", phones[0])
-else:
-    print("Phone not found")
+    if polarity > 0:
+        print("Sentiment: Positive 😊")
+    elif polarity < 0:
+        print("Sentiment: Negative 😔")
+    else:
+        print("Sentiment: Neutral 😐")
